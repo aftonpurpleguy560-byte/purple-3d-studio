@@ -1,22 +1,20 @@
-/* Purple-3D-Studio Core Engine - V1.5
+/* Purple-3D-Studio Professional Core - V1.5
     Author: Purpleguy © 2026 - tablet power
-    Features: Color Palette, Emissive Control, Load System, Raycasting
+    Features: Splash Screen Logic, Daily Notifications, Bloom, Save/Load
 */
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
-
-// Post-Processing (Bloom) Importları
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
-// --- 1. DEĞİŞKENLER VE KONSOL ---
+// --- 1. GLOBAL DEĞİŞKENLER ---
 let isUnsaved = false;
 let interactableObjects = [];
-let selectedObject = null; // Şu an seçili olan obje
+let selectedObject = null;
 const consoleOutput = document.getElementById('console-output');
 
 function logToConsole(msg, type = "info") {
@@ -28,7 +26,45 @@ function logToConsole(msg, type = "info") {
     }
 }
 
-// --- 2. SAHNE VE RENDERER ---
+// --- 2. BAŞLANGIÇ MENÜSÜ & BİLDİRİM SİSTEMİ ---
+const startMenu = document.getElementById('start-menu');
+const startBtn = document.getElementById('btn-start');
+
+// 5 Günlük Menü Kontrolü
+const lastSeen = localStorage.getItem('PurpleEngine_LastSeen');
+const now = Date.now();
+const fiveDaysInMs = 5 * 24 * 60 * 60 * 1000;
+
+if (lastSeen && (now - lastSeen < fiveDaysInMs)) {
+    startMenu.style.display = 'none';
+}
+
+startBtn.onclick = () => {
+    startMenu.style.display = 'none';
+    localStorage.setItem('PurpleEngine_LastSeen', Date.now());
+    logToConsole("Purple 3D Studio'ya hoş geldin, Efe!", "success");
+};
+
+// Günlük 3 Bildirim Mantığı
+function checkDailyNotifications() {
+    const lastNotifDate = localStorage.getItem('PurpleEngine_NotifDate');
+    const today = new Date().toDateString();
+
+    if (lastNotifDate !== today) {
+        const messages = [
+            "📢 Bug bildirmek için: aftonpurpleguy560@gmail.com",
+            "💡 İpucu: Objeleri seçip Inspector'dan parlatabilirsin.",
+            "🚀 Bugün yeni bir dünya inşa etmeye ne dersin?"
+        ];
+        messages.forEach((msg, i) => {
+            setTimeout(() => logToConsole(msg, "info"), (i + 1) * 2500);
+        });
+        localStorage.setItem('PurpleEngine_NotifDate', today);
+    }
+}
+setTimeout(checkDailyNotifications, 3000);
+
+// --- 3. ÜÇ BOYUTLU SAHNE KURULUMU ---
 const container = document.getElementById('viewport-container');
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x010101);
@@ -39,55 +75,47 @@ camera.position.set(8, 6, 8);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(container.clientWidth, container.clientHeight);
-renderer.shadowMap.enabled = true;
 container.appendChild(renderer.domElement);
 
-// --- 3. BLOOM (PARLAMA) EFEKTİ KURULUMU ---
+// --- 4. POST-PROCESSING (BLOOM) ---
 const renderScene = new RenderPass(scene, camera);
-const bloomPass = new UnrealBloomPass(new THREE.Vector2(container.clientWidth, container.clientHeight), 1.5, 0.4, 0.85);
-bloomPass.threshold = 0.2; // Hangi parlaklıktan sonra parlayacak
-bloomPass.strength = 1.0;  // Parlama gücü
-bloomPass.radius = 0.5;    // Yayılma yarıçapı
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(container.clientWidth, container.clientHeight), 1.0, 0.4, 0.85);
+bloomPass.threshold = 0.25;
+bloomPass.strength = 1.2;
 
 const composer = new EffectComposer(renderer);
 composer.addPass(renderScene);
 composer.addPass(bloomPass);
 composer.addPass(new OutputPass());
 
-// --- 4. IŞIKLANDIRMA VE YARDIMCILAR ---
-const gridHelper = new THREE.GridHelper(100, 100, 0x1a1a1a, 0x0a0a0a);
-scene.add(gridHelper);
-
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-scene.add(ambientLight);
-
-const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-dirLight.position.set(5, 10, 7);
-scene.add(dirLight);
-
-// --- 5. KONTROLLER VE SEÇME SİSTEMİ (RAYCASTER) ---
+// --- 5. KONTROLLER VE YARDIMCILAR ---
 const orbit = new OrbitControls(camera, renderer.domElement);
-orbit.enableDamping = true; // Daha yumuşak hareket
+orbit.enableDamping = true;
 
 const transformControl = new TransformControls(camera, renderer.domElement);
-transformControl.setSpace('local'); // Objeye göre hareket etsin
 scene.add(transformControl);
 
+const grid = new THREE.GridHelper(50, 50, 0x222222, 0x111111);
+scene.add(grid);
+
+const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+scene.add(ambient);
+
+// --- 6. ETKİLEŞİM VE SEÇİM ---
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
-// Obje Seçme Fonksiyonu
-container.addEventListener('pointerdown', (event) => {
+container.addEventListener('pointerdown', (e) => {
     const rect = container.getBoundingClientRect();
-    mouse.x = ((event.clientX - rect.left) / container.clientWidth) * 2 - 1;
-    mouse.y = -((event.clientY - rect.top) / container.clientHeight) * 2 + 1;
+    mouse.x = ((e.clientX - rect.left) / container.clientWidth) * 2 - 1;
+    mouse.y = -((e.clientY - rect.top) / container.clientHeight) * 2 + 1;
 
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObjects(interactableObjects);
 
     if (intersects.length > 0) {
         selectObject(intersects[0].object);
-    } else if (event.target.tagName === 'CANVAS') {
+    } else if (e.target.tagName === 'CANVAS') {
         deselectObject();
     }
 });
@@ -97,7 +125,6 @@ function selectObject(obj) {
     transformControl.attach(obj);
     updateInspector(obj);
     updateExplorerHighlight();
-    logToConsole(`${obj.name} seçildi.`, "success");
 }
 
 function deselectObject() {
@@ -106,257 +133,156 @@ function deselectObject() {
     updateExplorerHighlight();
 }
 
-// Transform Değişince Kaydetme ve Inspector Güncelleme
 transformControl.addEventListener('dragging-changed', (e) => {
     orbit.enabled = !e.value;
-    if(!e.value && transformControl.object) {
-        markAsUnsaved();
-        updateInspector(transformControl.object);
-    }
+    if(!e.value) { markAsUnsaved(); updateInspector(selectedObject); }
 });
 
-// --- 6. INSPECTOR GÜNCELLEME VE ETKİLEŞİM ---
+// --- 7. INSPECTOR VE MATERYAL YÖNETİMİ ---
 function updateInspector(obj) {
-    // Transform Değerleri
+    if(!obj) return;
     document.getElementById('pos-x').value = obj.position.x.toFixed(2);
     document.getElementById('pos-y').value = obj.position.y.toFixed(2);
     document.getElementById('pos-z').value = obj.position.z.toFixed(2);
     
-    // Materyal Değerleri (Renk ve Parlama)
     if (obj.material && obj.material.color) {
-        const hex = "#" + obj.material.color.getHexString();
-        document.getElementById('obj-color').value = hex;
-        
-        if (obj.material.emissiveIntensity !== undefined) {
-            document.getElementById('obj-emissive').value = obj.material.emissiveIntensity;
-        }
-    } else if (obj.isPointLight) {
-        // Neon Işık ise kendi rengini al
-        const hex = "#" + obj.color.getHexString();
-        document.getElementById('obj-color').value = hex;
+        document.getElementById('obj-color').value = "#" + obj.material.color.getHexString();
+        document.getElementById('obj-emissive').value = obj.material.emissiveIntensity || 0;
     }
 }
 
-// Inspector Input Etkileşimleri
-['pos-x', 'pos-y', 'pos-z'].forEach(id => {
-    document.getElementById(id).addEventListener('input', (e) => {
-        if (!selectedObject) return;
-        const val = parseFloat(e.target.value);
-        if (id === 'pos-x') selectedObject.position.x = val;
-        if (id === 'pos-y') selectedObject.position.y = val;
-        if (id === 'pos-z') selectedObject.position.z = val;
-        markAsUnsaved();
-    });
-});
-
-// RENK DEĞİŞTİRME ÖZELLİĞİ
 document.getElementById('obj-color').addEventListener('input', (e) => {
-    if (!selectedObject) return;
-    const newColor = e.target.value;
-    
-    if (selectedObject.material) {
-        selectedObject.material.color.set(newColor);
-        if (selectedObject.material.emissive) selectedObject.material.emissive.set(newColor);
-    }
-    if (selectedObject.isPointLight) {
-        selectedObject.color.set(newColor);
-        if(selectedObject.userData.helper) selectedObject.userData.helper.update();
-    }
+    if (!selectedObject || !selectedObject.material) return;
+    selectedObject.material.color.set(e.target.value);
+    if(selectedObject.material.emissive) selectedObject.material.emissive.set(e.target.value);
     markAsUnsaved();
 });
 
-// PARLAMA (EMISSIVE) AYARI
 document.getElementById('obj-emissive').addEventListener('input', (e) => {
-    if (!selectedObject || !selectedObject.material || selectedObject.material.emissiveIntensity === undefined) return;
+    if (!selectedObject || !selectedObject.material) return;
     selectedObject.material.emissiveIntensity = parseFloat(e.target.value);
     markAsUnsaved();
 });
 
-// --- 7. KAYIT VE YÜKLEME SİSTEMİ ---
+// --- 8. KAYIT SİSTEMİ VE F5 KORUMASI ---
 function markAsUnsaved() {
     isUnsaved = true;
-    const status = document.getElementById('statusbar');
-    if(status) status.innerHTML = `<span style="color: #ff4444;">● Kaydedilmemiş Değişiklikler</span>`;
+    document.getElementById('statusbar').innerHTML = `<span style="color:#ff4444">● Kaydedilmemiş Değişiklikler</span>`;
 }
 
-// Çıkış Uyarısı (F5 Koruması)
-window.addEventListener('beforeunload', (e) => {
-    if (isUnsaved) {
-        e.preventDefault();
-        e.returnValue = 'Yaptığınız değişiklikler kaydedilmedi, çıkmak istiyor musunuz?';
-    }
-});
+window.onbeforeunload = (e) => {
+    if (isUnsaved) return "Kayıt edilmemiş verileriniz var. Ayrılmak istiyor musunuz?";
+};
 
-// KAYDET Butonu
-document.getElementById('btn-save').addEventListener('click', () => {
-    const saveData = interactableObjects.map(obj => ({
+document.getElementById('btn-save').onclick = () => {
+    const data = interactableObjects.map(obj => ({
         name: obj.name,
-        type: obj.geometry ? obj.geometry.type : (obj.isPointLight ? 'PointLight' : 'Sprite'),
-        position: obj.position.toArray(),
-        rotation: obj.rotation.toArray(),
-        scale: obj.scale.toArray(),
-        color: obj.material ? "#" + obj.material.color.getHexString() : (obj.isPointLight ? "#" + obj.color.getHexString() : "#bc13fe"),
-        emissiveIntensity: obj.material ? obj.material.emissiveIntensity : 0.6
+        type: obj.geometry.type,
+        pos: obj.position.toArray(),
+        rot: obj.rotation.toArray(),
+        color: "#" + obj.material.color.getHexString(),
+        emi: obj.material.emissiveIntensity
     }));
-
-    localStorage.setItem('PurpleEngine_Save_v1', JSON.stringify(saveData));
+    localStorage.setItem('PurpleEngine_Project', JSON.stringify(data));
     isUnsaved = false;
-    logToConsole("Proje tarayıcıya kazındı!", "success");
-    document.getElementById('statusbar').innerText = "🟢 Proje Güvende | LocalStorage";
-});
+    document.getElementById('statusbar').innerText = "🟢 Proje Kaydedildi";
+    logToConsole("Proje başarıyla kaydedildi.", "success");
+};
 
-// YÜKLE Butonu
-document.getElementById('btn-load').addEventListener('click', () => {
-    const rawData = localStorage.getItem('PurpleEngine_Save_v1');
-    if (!rawData) {
-        logToConsole("Kayıtlı proje bulunamadı.", "error");
-        return;
-    }
-
-    // Sahneyi temizle
-    deselectObject();
-    interactableObjects.forEach(obj => {
-        if(obj.userData.helper) scene.remove(obj.userData.helper);
-        scene.remove(obj);
-    });
+document.getElementById('btn-load').onclick = () => {
+    const raw = localStorage.getItem('PurpleEngine_Project');
+    if(!raw) return logToConsole("Kayıt bulunamadı!", "error");
+    
+    // Temizlik
+    interactableObjects.forEach(o => scene.remove(o));
     interactableObjects = [];
-
-    const savedData = JSON.parse(rawData);
-    savedData.forEach(data => {
-        let typeKey = 'box';
-        if(data.type.includes('Sphere')) typeKey = 'sphere';
-        if(data.type.includes('Torus')) typeKey = 'torus';
-        if(data.type === 'PointLight') typeKey = 'neon';
-        // Sprite desteği şimdilik placeholder
-
-        createObject(typeKey);
-        const newObj = interactableObjects[interactableObjects.length - 1];
-        newObj.name = data.name;
-        newObj.position.fromArray(data.position);
-        newObj.rotation.fromArray(data.rotation);
-        newObj.scale.fromArray(data.scale);
-        
-        if(newObj.material) {
-            newObj.material.color.set(data.color);
-            if(newObj.material.emissive) newObj.material.emissive.set(data.color);
-            newObj.material.emissiveIntensity = data.emissiveIntensity;
-        }
-        if(newObj.isPointLight) {
-            newObj.color.set(data.color);
-            if(newObj.userData.helper) newObj.userData.helper.update();
-        }
+    
+    JSON.parse(raw).forEach(d => {
+        createObject('box', false); // Basitçe box oluşturup veriyi basıyoruz
+        const o = interactableObjects[interactableObjects.length - 1];
+        o.name = d.name;
+        o.position.fromArray(d.pos);
+        o.rotation.fromArray(d.rot);
+        o.material.color.set(d.color);
+        o.material.emissive.set(d.color);
+        o.material.emissiveIntensity = d.emi;
     });
-
     updateExplorerUI();
-    isUnsaved = false;
-    logToConsole("Proje LocalStorage'dan yüklendi!", "success");
-});
+    logToConsole("Proje yüklendi.", "success");
+};
 
-// --- 8. OBJE YÖNETİMİ ---
+// --- 9. OBJE OLUŞTURMA ---
+function createObject(type) {
+    let geo;
+    if(type === 'box') geo = new THREE.BoxGeometry(1,1,1);
+    else if(type === 'sphere') geo = new THREE.SphereGeometry(0.7, 32, 32);
+    else geo = new THREE.TorusGeometry(0.5, 0.2, 16, 100);
+
+    const mat = new THREE.MeshStandardMaterial({ 
+        color: 0xbc13fe, emissive: 0xbc13fe, emissiveIntensity: 0.6 
+    });
+    
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.name = type.toUpperCase() + "_" + (interactableObjects.length + 1);
+    mesh.position.set(Math.random()*4-2, 0.5, Math.random()*4-2);
+    
+    scene.add(mesh);
+    interactableObjects.push(mesh);
+    updateExplorerUI();
+    markAsUnsaved();
+}
+
 function updateExplorerUI() {
     const list = document.getElementById('scene-graph');
-    if(!list) return;
     list.innerHTML = "";
     interactableObjects.forEach(obj => {
         const li = document.createElement('li');
         li.innerText = obj.name;
-        li.dataset.objId = obj.uuid; // Eşleşme için
+        if(selectedObject === obj) li.classList.add('selected');
         li.onclick = () => selectObject(obj);
         list.appendChild(li);
     });
-    updateExplorerHighlight();
 }
 
 function updateExplorerHighlight() {
-    const items = document.querySelectorAll('#scene-graph li');
-    items.forEach(li => {
-        if (selectedObject && li.dataset.objId === selectedObject.uuid) {
-            li.classList.add('selected');
-        } else {
-            li.classList.remove('selected');
-        }
-    });
-}
-
-function createObject(type) {
-    let mesh;
-    // Standart Neon Materyal
-    const mat = new THREE.MeshStandardMaterial({ 
-        color: 0xbc13fe, 
-        emissive: 0xbc13fe, 
-        emissiveIntensity: 0.6,
-        metalness: 0.7, 
-        roughness: 0.2 
-    });
-    
-    if(type === 'box') mesh = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), mat);
-    if(type === 'sphere') mesh = new THREE.Mesh(new THREE.SphereGeometry(0.7,32,32), mat);
-    if(type === 'torus') mesh = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.2, 16, 100), mat);
-    
-    // Neon Işık (PointLight)
-    if(type === 'neon') {
-        const light = new THREE.PointLight(0xbc13fe, 3, 10);
-        light.name = `LIGHT_${interactableObjects.length + 1}`;
-        light.position.set(Math.random()*2, 2, Math.random()*2);
-        
-        // Işık yardımcısı
-        const helper = new THREE.PointLightHelper(light, 0.3, 0xbc13fe);
-        scene.add(helper);
-        light.userData.helper = helper; // Yardımcıyı ışığa bağla
-        mesh = light; // Işığı ana obje gibi davranmaya zorla (seçim için)
-    }
-
-    if(mesh) {
-        if(!mesh.name) mesh.name = `${type.toUpperCase()}_${interactableObjects.length + 1}`;
-        if(type !== 'neon') mesh.position.set(Math.random()*4-2, 0.5, Math.random()*4-2);
-        scene.add(mesh);
-        interactableObjects.push(mesh);
-        updateExplorerUI();
-        markAsUnsaved();
-        if(type !== 'neon') logToConsole(`${mesh.name} oluşturuldu.`, "info");
-    }
+    updateExplorerUI();
 }
 
 document.getElementById('confirm-add').onclick = () => {
     createObject(document.getElementById('obj-type').value);
-    document.getElementById('add-menu').style.display = 'none';
 };
 
 document.getElementById('btn-delete').onclick = () => {
     if(!selectedObject) return;
-    if(selectedObject.userData.helper) scene.remove(selectedObject.userData.helper); // Işık yardımcısını sil
     scene.remove(selectedObject);
     interactableObjects = interactableObjects.filter(o => o !== selectedObject);
     deselectObject();
     updateExplorerUI();
     markAsUnsaved();
-    logToConsole(`${selectedObject ? selectedObject.name : 'Obje'} silindi.`, "error");
 };
 
-// --- 9. ARAÇLAR (TRANSFORM MODLARI) ---
+// --- 10. DÖNGÜ VE ARAÇLAR ---
 const tools = { 'btn-translate': 'translate', 'btn-rotate': 'rotate', 'btn-scale': 'scale' };
 Object.keys(tools).forEach(id => {
     document.getElementById(id).onclick = () => {
-        Object.keys(tools).forEach(btnId => document.getElementById(btnId).classList.remove('active'));
+        Object.keys(tools).forEach(b => document.getElementById(b).classList.remove('active'));
         document.getElementById(id).classList.add('active');
         transformControl.setMode(tools[id]);
     };
 });
 
-// --- 10. RENDER DÖNGÜSÜ ---
 function animate() {
     requestAnimationFrame(animate);
     orbit.update();
-    composer.render(); // renderer yerine efektli composer
+    composer.render();
 }
 animate();
 
-// Pencere Boyutu Değişimi
-window.addEventListener('resize', () => {
+window.onresize = () => {
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);
     composer.setSize(container.clientWidth, container.clientHeight);
-});
+};
 
-logToConsole("Purple Engine Canlandı. Keyifli tasarımlar Efe!", "success");
+logToConsole("Motor hazır. Purpleguy © 2026", "success");
