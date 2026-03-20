@@ -1,21 +1,24 @@
 /* Purple-3D-Studio Professional Theme
-    Author: Purpleguy © 2026
+    Author: Purpleguy © 2026 - tablet power
 */
 
 :root {
     --bg-main: #050505;
-    --panel-bg: rgba(18, 18, 18, 0.95);
-    --border-color: #2a2a2a;
+    --panel-bg: rgba(12, 12, 12, 0.98);
+    --border-color: #222;
     --purple-neon: #bc13fe;
+    --purple-dark: #6a0dad;
     --text-main: #e0e0e0;
-    --text-dim: #888;
+    --text-dim: #777;
     --accent-red: #ff4444;
-    --panel-header: #0d0d0d;
+    --accent-green: #00ff41;
+    --panel-header: #0a0a0a;
 }
 
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
+    outline: none;
 }
 
 body {
@@ -23,27 +26,30 @@ body {
     padding: 0;
     background: var(--bg-main);
     color: var(--text-main);
-    font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     overflow: hidden;
     user-select: none;
 }
 
-/* -- ANA DÜZEN -- */
+/* -- ANA KONTEYNER -- */
 #engine-container {
     display: flex;
     flex-direction: column;
     height: 100vh;
 }
 
+/* -- ÜST BAR (TOPBAR) -- */
 #topbar {
     background: #000;
-    padding: 10px 20px;
-    font-weight: bold;
-    font-size: 13px;
+    padding: 8px 15px;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 1px;
     border-bottom: 1px solid var(--purple-neon);
     display: flex;
     align-items: center;
     z-index: 1000;
+    text-transform: uppercase;
 }
 
 #main-workspace {
@@ -52,18 +58,17 @@ body {
     overflow: hidden;
 }
 
-/* -- PANEL STİLLERİ -- */
+/* -- PANEL GENEL STİLLERİ -- */
 .floating-panel {
     background: var(--panel-bg);
     border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    backdrop-filter: blur(5px);
-    transition: 0.3s ease;
+    backdrop-filter: blur(10px);
 }
 
 aside {
-    width: 260px;
+    width: 280px;
     z-index: 10;
 }
 
@@ -72,11 +77,11 @@ aside {
 
 .panel-title {
     background: var(--panel-header);
-    padding: 10px 15px;
-    font-size: 11px;
+    padding: 8px 12px;
+    font-size: 10px;
     color: var(--text-dim);
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
@@ -100,54 +105,68 @@ aside {
 /* -- ARAÇ ÇUBUĞU (TOOLS) -- */
 #tools-panel {
     position: absolute;
-    top: 20px;
+    top: 15px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 5px;
-    background: rgba(0,0,0,0.8);
-    padding: 5px;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid var(--purple-neon);
     z-index: 100;
+    box-shadow: 0 0 15px rgba(188, 19, 254, 0.2);
 }
 
 .tool-btn {
     background: transparent;
     border: none;
     color: var(--text-dim);
-    padding: 8px 12px;
-    font-size: 12px;
+    padding: 8px 14px;
+    font-size: 11px;
     cursor: pointer;
-    border-radius: 4px;
-    transition: 0.2s;
+    border-radius: 6px;
+    transition: all 0.2s ease;
 }
 
-.tool-btn:hover { background: #222; color: #fff; }
-.tool-btn.active { background: var(--purple-neon); color: #000; font-weight: bold; }
+.tool-btn:hover { background: #1a1a1a; color: #fff; }
+
+.tool-btn.active { 
+    background: var(--purple-neon); 
+    color: #000; 
+    font-weight: bold; 
+    box-shadow: 0 0 10px var(--purple-neon);
+}
+
 .tool-btn.danger:hover { background: var(--accent-red) !important; color: white; }
 
-.divider { width: 1px; background: #333; margin: 0 5px; }
+.divider { width: 1px; background: #333; margin: 0 4px; }
 
-/* -- ALT PANEL (CONSOLE) -- */
+/* -- ALT PANEL (CONSOLE / ANIM) -- */
 #bottom-panel {
-    height: 220px;
-    margin: 0 10px 10px 10px;
-    border-radius: 8px;
+    height: 200px;
+    margin: 5px 10px 10px 10px;
+    border-radius: 10px;
     overflow: hidden;
+    border: 1px solid var(--border-color);
 }
 
 #console-output {
     flex: 1;
     background: #000;
-    padding: 10px;
-    font-family: 'Consolas', 'Monaco', monospace;
-    font-size: 12px;
+    padding: 12px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 11px;
     overflow-y: auto;
-    color: #00ff41; /* Matrix Yeşili */
+    color: var(--accent-green);
 }
 
-.log-entry { margin-bottom: 4px; border-bottom: 1px solid #111; padding-bottom: 2px; }
+.log-entry { 
+    margin-bottom: 5px; 
+    border-bottom: 1px solid #111; 
+    padding-bottom: 3px; 
+    line-height: 1.4;
+}
 
 /* -- TAB SİSTEMİ -- */
 .panel-tabs {
@@ -160,78 +179,102 @@ aside {
     background: none;
     border: none;
     color: var(--text-dim);
-    padding: 10px 15px;
+    padding: 10px 18px;
     font-size: 10px;
     text-transform: uppercase;
     cursor: pointer;
     letter-spacing: 1px;
+    transition: 0.3s;
 }
 
 .tab-btn.active {
     color: var(--purple-neon);
     border-bottom: 2px solid var(--purple-neon);
-    background: rgba(188, 19, 254, 0.05);
+    background: rgba(188, 19, 254, 0.08);
 }
 
-/* -- HİYERARŞİ LİSTESİ -- */
+/* -- HIYERARŞİ VE LİSTELER -- */
+#add-btn {
+    background: var(--purple-neon);
+    color: #000;
+    border: none;
+    border-radius: 3px;
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+}
+
 #scene-graph {
     list-style: none;
     padding: 0;
     margin: 0;
-    overflow-y: auto;
 }
 
 #scene-graph li {
-    padding: 8px 15px;
+    padding: 10px 15px;
     font-size: 12px;
-    border-bottom: 1px solid #1a1a1a;
+    border-bottom: 1px solid #111;
     cursor: pointer;
-    color: #ccc;
+    color: #bbb;
+    transition: 0.2s;
 }
 
-#scene-graph li:hover { background: #1a1a1a; }
-#scene-graph li.active { 
-    background: rgba(188, 19, 254, 0.15); 
-    border-left: 3px solid var(--purple-neon);
-    color: #fff;
+#scene-graph li:hover { background: #1a1a1a; color: #fff; }
+
+/* -- INSPECTOR -- */
+#inspector-content { padding: 20px; }
+.prop-group label { 
+    display: block; 
+    font-size: 9px; 
+    color: var(--purple-neon); 
+    margin-bottom: 12px; 
+    text-transform: uppercase; 
+    font-weight: bold;
 }
 
-/* -- INSPECTOR (PROPS) -- */
-#inspector-content { padding: 15px; }
-.prop-group { margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 15px; }
-.prop-group label { display: block; font-size: 10px; color: var(--purple-neon); margin-bottom: 10px; text-transform: uppercase; }
+.prop-row { display: flex; align-items: center; margin-bottom: 10px; }
+.prop-row span { width: 35px; color: var(--text-dim); font-size: 11px; }
 
-.prop-row { display: flex; align-items: center; margin-bottom: 8px; font-size: 12px; }
-.prop-row span { width: 30px; color: var(--text-dim); }
 .prop-row input {
     background: #000;
-    border: 1px solid #333;
-    color: #fff;
-    padding: 5px;
+    border: 1px solid #222;
+    color: var(--accent-green);
+    padding: 6px;
     width: 100%;
-    border-radius: 3px;
+    border-radius: 4px;
     font-size: 11px;
+    font-family: monospace;
 }
+
+.prop-row input:focus { border-color: var(--purple-neon); }
 
 /* -- NEON EFEKTLERİ -- */
 .neon-glow {
-    box-shadow: 0 0 10px rgba(188, 19, 254, 0.3);
-    text-shadow: 0 0 5px var(--purple-neon);
+    text-shadow: 0 0 8px var(--purple-neon);
 }
 
 /* -- STATUSBAR -- */
 #statusbar {
     background: #000;
-    padding: 5px 15px;
+    padding: 6px 15px;
     font-size: 10px;
-    color: #555;
-    border-top: 1px solid #1a1a1a;
+    color: #444;
+    border-top: 1px solid #111;
     display: flex;
-    gap: 15px;
+    justify-content: space-between;
 }
 
-/* -- RESPONSIVE (TABLET) -- */
-@media (max-width: 768px) {
-    aside { width: 200px; }
-    .tool-btn { padding: 6px 8px; font-size: 10px; }
+/* -- TABLET ÖZEL AYARLAR -- */
+@media (max-width: 1024px) {
+    aside { width: 220px; }
+    #bottom-panel { height: 160px; }
+    .tool-btn { padding: 6px 10px; font-size: 10px; }
 }
+
+/* Kaydırma Çubuklarını Özelleştir (Modern Görünüm) */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--purple-neon); }
