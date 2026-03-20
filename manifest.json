@@ -1,0 +1,21 @@
+{
+  "name": "Purple 3D Studio",
+  "short_name": "Purple3D",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#bc13fe",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192/bc13fe/ffffff?text=P",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512/bc13fe/ffffff?text=Purple3D",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+
