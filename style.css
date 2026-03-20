@@ -1,9 +1,237 @@
-#center-viewport { flex: 1; display: flex; flex-direction: column; position: relative; }
-#bottom-panel { height: 200px; background: var(--panel-bg); margin: 10px; border: 1px solid var(--border-color); border-radius: 8px; display: flex; flex-direction: column; }
-#console-output { flex: 1; padding: 10px; font-family: 'Courier New', monospace; font-size: 12px; color: #00ff00; overflow-y: auto; background: #000; }
+/* Purple-3D-Studio Professional Theme
+    Author: Purpleguy © 2026
+*/
 
-.panel-tabs { display: flex; background: #080808; border-bottom: 1px solid var(--border-color); }
-.tab-btn { background: none; border: none; color: #888; padding: 8px 15px; cursor: pointer; font-size: 11px; text-transform: uppercase; }
-.tab-btn.active { color: var(--purple-neon); border-bottom: 2px solid var(--purple-neon); }
+:root {
+    --bg-main: #050505;
+    --panel-bg: rgba(18, 18, 18, 0.95);
+    --border-color: #2a2a2a;
+    --purple-neon: #bc13fe;
+    --text-main: #e0e0e0;
+    --text-dim: #888;
+    --accent-red: #ff4444;
+    --panel-header: #0d0d0d;
+}
 
-#btn-delete:hover { background: #ff4444 !important; color: white; }
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* -- ANA DÜZEN -- */
+#engine-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+#topbar {
+    background: #000;
+    padding: 10px 20px;
+    font-weight: bold;
+    font-size: 13px;
+    border-bottom: 1px solid var(--purple-neon);
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+}
+
+#main-workspace {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* -- PANEL STİLLERİ -- */
+.floating-panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(5px);
+    transition: 0.3s ease;
+}
+
+aside {
+    width: 260px;
+    z-index: 10;
+}
+
+#explorer { border-right: 1px solid var(--border-color); }
+#inspector { border-left: 1px solid var(--border-color); }
+
+.panel-title {
+    background: var(--panel-header);
+    padding: 10px 15px;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* -- ORTA ALAN (VIEWPORT) -- */
+#center-viewport {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: #000;
+}
+
+#viewport-container {
+    flex: 1;
+    cursor: crosshair;
+}
+
+/* -- ARAÇ ÇUBUĞU (TOOLS) -- */
+#tools-panel {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 5px;
+    background: rgba(0,0,0,0.8);
+    padding: 5px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    z-index: 100;
+}
+
+.tool-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    padding: 8px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: 0.2s;
+}
+
+.tool-btn:hover { background: #222; color: #fff; }
+.tool-btn.active { background: var(--purple-neon); color: #000; font-weight: bold; }
+.tool-btn.danger:hover { background: var(--accent-red) !important; color: white; }
+
+.divider { width: 1px; background: #333; margin: 0 5px; }
+
+/* -- ALT PANEL (CONSOLE) -- */
+#bottom-panel {
+    height: 220px;
+    margin: 0 10px 10px 10px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#console-output {
+    flex: 1;
+    background: #000;
+    padding: 10px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 12px;
+    overflow-y: auto;
+    color: #00ff41; /* Matrix Yeşili */
+}
+
+.log-entry { margin-bottom: 4px; border-bottom: 1px solid #111; padding-bottom: 2px; }
+
+/* -- TAB SİSTEMİ -- */
+.panel-tabs {
+    display: flex;
+    background: #080808;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    padding: 10px 15px;
+    font-size: 10px;
+    text-transform: uppercase;
+    cursor: pointer;
+    letter-spacing: 1px;
+}
+
+.tab-btn.active {
+    color: var(--purple-neon);
+    border-bottom: 2px solid var(--purple-neon);
+    background: rgba(188, 19, 254, 0.05);
+}
+
+/* -- HİYERARŞİ LİSTESİ -- */
+#scene-graph {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+}
+
+#scene-graph li {
+    padding: 8px 15px;
+    font-size: 12px;
+    border-bottom: 1px solid #1a1a1a;
+    cursor: pointer;
+    color: #ccc;
+}
+
+#scene-graph li:hover { background: #1a1a1a; }
+#scene-graph li.active { 
+    background: rgba(188, 19, 254, 0.15); 
+    border-left: 3px solid var(--purple-neon);
+    color: #fff;
+}
+
+/* -- INSPECTOR (PROPS) -- */
+#inspector-content { padding: 15px; }
+.prop-group { margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 15px; }
+.prop-group label { display: block; font-size: 10px; color: var(--purple-neon); margin-bottom: 10px; text-transform: uppercase; }
+
+.prop-row { display: flex; align-items: center; margin-bottom: 8px; font-size: 12px; }
+.prop-row span { width: 30px; color: var(--text-dim); }
+.prop-row input {
+    background: #000;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 5px;
+    width: 100%;
+    border-radius: 3px;
+    font-size: 11px;
+}
+
+/* -- NEON EFEKTLERİ -- */
+.neon-glow {
+    box-shadow: 0 0 10px rgba(188, 19, 254, 0.3);
+    text-shadow: 0 0 5px var(--purple-neon);
+}
+
+/* -- STATUSBAR -- */
+#statusbar {
+    background: #000;
+    padding: 5px 15px;
+    font-size: 10px;
+    color: #555;
+    border-top: 1px solid #1a1a1a;
+    display: flex;
+    gap: 15px;
+}
+
+/* -- RESPONSIVE (TABLET) -- */
+@media (max-width: 768px) {
+    aside { width: 200px; }
+    .tool-btn { padding: 6px 8px; font-size: 10px; }
+}
