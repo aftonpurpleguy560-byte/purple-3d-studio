@@ -1,50 +1,52 @@
-/* Purple-3D-Studio Professional Theme
+/* Purple-3D-Studio Professional Theme V1.5
     Author: Purpleguy © 2026 - tablet power
+    Optimized for: Samsung Galaxy Tab A9+ & WebKit
 */
 
 :root {
-    --bg-main: #050505;
-    --panel-bg: rgba(12, 12, 12, 0.98);
+    --bg-main: #020202;
+    --panel-bg: rgba(10, 10, 10, 0.95);
     --border-color: #222;
     --purple-neon: #bc13fe;
     --purple-dark: #6a0dad;
     --text-main: #e0e0e0;
-    --text-dim: #777;
+    --text-dim: #888;
     --accent-red: #ff4444;
     --accent-green: #00ff41;
-    --panel-header: #0a0a0a;
+    --panel-header: #080808;
 }
 
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
     outline: none;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    margin: 0;
-    padding: 0;
     background: var(--bg-main);
     color: var(--text-main);
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    overflow: hidden;
-    user-select: none;
+    overflow: hidden; /* Sayfanın kaymasını engeller, uygulama hissi verir */
+    user-select: none; /* Yazıların yanlışlıkla seçilmesini önler */
 }
 
-/* -- ANA KONTEYNER -- */
+/* -- ANA KONTEYNER (FULL EKRAN) -- */
 #engine-container {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    width: 100vw;
 }
 
 /* -- ÜST BAR (TOPBAR) -- */
 #topbar {
     background: #000;
     padding: 8px 15px;
-    font-weight: 800;
-    font-size: 12px;
-    letter-spacing: 1px;
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 1.5px;
     border-bottom: 1px solid var(--purple-neon);
     display: flex;
     align-items: center;
@@ -58,18 +60,20 @@ body {
     overflow: hidden;
 }
 
-/* -- PANEL GENEL STİLLERİ -- */
+/* -- PANELLER (SOL VE SAĞ) -- */
 .floating-panel {
     background: var(--panel-bg);
     border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(5px);
 }
 
 aside {
     width: 280px;
     z-index: 10;
+    display: flex;
+    flex-direction: column;
 }
 
 #explorer { border-right: 1px solid var(--border-color); }
@@ -77,8 +81,8 @@ aside {
 
 .panel-title {
     background: var(--panel-header);
-    padding: 8px 12px;
-    font-size: 10px;
+    padding: 10px 15px;
+    font-size: 11px;
     color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -100,6 +104,7 @@ aside {
 #viewport-container {
     flex: 1;
     cursor: crosshair;
+    overflow: hidden;
 }
 
 /* -- ARAÇ ÇUBUĞU (TOOLS) -- */
@@ -109,24 +114,25 @@ aside {
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 4px;
+    gap: 6px;
     background: rgba(0, 0, 0, 0.85);
-    padding: 4px;
+    padding: 6px;
     border-radius: 8px;
     border: 1px solid var(--purple-neon);
     z-index: 100;
-    box-shadow: 0 0 15px rgba(188, 19, 254, 0.2);
+    box-shadow: 0 0 15px rgba(188, 19, 254, 0.25);
 }
 
 .tool-btn {
     background: transparent;
-    border: none;
+    border: 1px solid transparent;
     color: var(--text-dim);
-    padding: 8px 14px;
-    font-size: 11px;
+    padding: 8px 15px;
+    font-size: 12px;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 4px;
     transition: all 0.2s ease;
+    font-weight: bold;
 }
 
 .tool-btn:hover { background: #1a1a1a; color: #fff; }
@@ -134,21 +140,22 @@ aside {
 .tool-btn.active { 
     background: var(--purple-neon); 
     color: #000; 
-    font-weight: bold; 
-    box-shadow: 0 0 10px var(--purple-neon);
+    box-shadow: 0 0 12px var(--purple-neon);
 }
 
-.tool-btn.danger:hover { background: var(--accent-red) !important; color: white; }
+.tool-btn.danger:hover { background: var(--accent-red) !important; color: white; border-color: var(--accent-red); }
 
-.divider { width: 1px; background: #333; margin: 0 4px; }
+.divider { width: 1px; background: #333; margin: 0 5px; }
 
-/* -- ALT PANEL (CONSOLE / ANIM) -- */
+/* -- ALT PANEL (CONSOLE & ANIMATION) -- */
 #bottom-panel {
-    height: 200px;
+    height: 220px;
     margin: 5px 10px 10px 10px;
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden;
     border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
 }
 
 #console-output {
@@ -156,16 +163,16 @@ aside {
     background: #000;
     padding: 12px;
     font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 11px;
+    font-size: 12px;
     overflow-y: auto;
     color: var(--accent-green);
 }
 
 .log-entry { 
-    margin-bottom: 5px; 
+    margin-bottom: 6px; 
     border-bottom: 1px solid #111; 
-    padding-bottom: 3px; 
-    line-height: 1.4;
+    padding-bottom: 4px; 
+    line-height: 1.5;
 }
 
 /* -- TAB SİSTEMİ -- */
@@ -176,105 +183,110 @@ aside {
 }
 
 .tab-btn {
+    flex: 1;
     background: none;
     border: none;
     color: var(--text-dim);
-    padding: 10px 18px;
-    font-size: 10px;
+    padding: 12px;
+    font-size: 11px;
     text-transform: uppercase;
     cursor: pointer;
     letter-spacing: 1px;
     transition: 0.3s;
+    font-weight: bold;
 }
 
 .tab-btn.active {
     color: var(--purple-neon);
     border-bottom: 2px solid var(--purple-neon);
-    background: rgba(188, 19, 254, 0.08);
+    background: rgba(188, 19, 254, 0.1);
 }
 
-/* -- HIYERARŞİ VE LİSTELER -- */
-#add-btn {
-    background: var(--purple-neon);
-    color: #000;
-    border: none;
-    border-radius: 3px;
-    width: 20px;
-    height: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 14px;
-}
-
+/* -- HİYERARŞİ LİSTESİ VE PROJE -- */
 #scene-graph {
     list-style: none;
-    padding: 0;
-    margin: 0;
+    overflow-y: auto;
+    flex: 1;
 }
 
 #scene-graph li {
-    padding: 10px 15px;
-    font-size: 12px;
+    padding: 12px 15px;
+    font-size: 13px;
     border-bottom: 1px solid #111;
     cursor: pointer;
-    color: #bbb;
+    color: #ccc;
     transition: 0.2s;
 }
 
-#scene-graph li:hover { background: #1a1a1a; color: #fff; }
+#scene-graph li:hover, #scene-graph li.selected { 
+    background: rgba(188, 19, 254, 0.15); 
+    color: #fff; 
+    border-left: 3px solid var(--purple-neon);
+}
 
-/* -- INSPECTOR -- */
-#inspector-content { padding: 20px; }
+.asset-item:hover {
+    background: #1a1a1a !important;
+    border-color: var(--purple-neon) !important;
+}
+
+/* -- INSPECTOR (ÖZELLİKLER) -- */
+#inspector-content { padding: 15px; overflow-y: auto; flex: 1; }
+
 .prop-group label { 
     display: block; 
-    font-size: 9px; 
+    font-size: 10px; 
     color: var(--purple-neon); 
     margin-bottom: 12px; 
     text-transform: uppercase; 
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.prop-row { display: flex; align-items: center; margin-bottom: 12px; }
+.prop-row span { width: 45px; color: var(--text-dim); font-size: 12px; font-weight: bold; }
+
+.prop-row input[type="number"] {
+    flex: 1;
+    background: #000;
+    border: 1px solid #333;
+    color: var(--accent-green);
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: monospace;
+    transition: 0.3s;
+}
+
+.prop-row input[type="number"]:focus { border-color: var(--purple-neon); box-shadow: 0 0 5px rgba(188, 19, 254, 0.5); }
+
+/* Renk Paleti ve Slider Özelleştirmeleri */
+input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+input[type="color"]::-webkit-color-swatch { border: 1px solid #333; border-radius: 4px; }
+input[type="range"] { flex: 1; cursor: pointer; }
+
+/* -- NEON EFEKTLERİ -- */
+.neon-glow { text-shadow: 0 0 10px var(--purple-neon); }
+
+/* -- ALT DURUM ÇUBUĞU (STATUSBAR) -- */
+#statusbar {
+    background: #000;
+    padding: 8px 15px;
+    font-size: 11px;
+    color: #666;
+    border-top: 1px solid #111;
     font-weight: bold;
 }
 
-.prop-row { display: flex; align-items: center; margin-bottom: 10px; }
-.prop-row span { width: 35px; color: var(--text-dim); font-size: 11px; }
-
-.prop-row input {
-    background: #000;
-    border: 1px solid #222;
-    color: var(--accent-green);
-    padding: 6px;
-    width: 100%;
-    border-radius: 4px;
-    font-size: 11px;
-    font-family: monospace;
-}
-
-.prop-row input:focus { border-color: var(--purple-neon); }
-
-/* -- NEON EFEKTLERİ -- */
-.neon-glow {
-    text-shadow: 0 0 8px var(--purple-neon);
-}
-
-/* -- STATUSBAR -- */
-#statusbar {
-    background: #000;
-    padding: 6px 15px;
-    font-size: 10px;
-    color: #444;
-    border-top: 1px solid #111;
-    display: flex;
-    justify-content: space-between;
-}
-
-/* -- TABLET ÖZEL AYARLAR -- */
+/* -- TABLET (A9+) İÇİN MOBİL UYUMLULUK -- */
 @media (max-width: 1024px) {
-    aside { width: 220px; }
-    #bottom-panel { height: 160px; }
-    .tool-btn { padding: 6px 10px; font-size: 10px; }
+    aside { width: 240px; }
+    #bottom-panel { height: 180px; }
+    .tool-btn { padding: 8px 10px; font-size: 11px; }
+    #tools-panel { gap: 4px; padding: 4px; top: 10px; }
 }
 
-/* Kaydırma Çubuklarını Özelleştir (Modern Görünüm) */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+/* -- KAYDIRMA ÇUBUKLARI (MODERN SİBERPUNK) -- */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #050505; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--purple-neon); }
