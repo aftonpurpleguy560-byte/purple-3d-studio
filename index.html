@@ -3,43 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Purple 3D Studio</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#bc13fe">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
+    <title>Purple Engine 2026</title>
     <link rel="stylesheet" href="style.css">
-
-    <style>
-        /* CSS dosyan henüz yüklenmediyse ekranın siyah kalması için kısa bir önlem */
-        body { 
-            margin: 0; 
-            background-color: #050505; 
-            overflow: hidden; 
-            touch-action: none; /* Tablette kaydırmayı engellemek için */
-        }
-    </style>
-</head>
-<body>
-
-    <div id="ui">
-        <h1>Purple 3D Studio</h1>
-        <p>Aga Motor Çalışıyor 🚀</p>
-    </div>
-
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW Kayıtlı!', reg))
-                    .catch(err => console.log('SW Hatası:', err));
-            });
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
         }
     </script>
+</head>
+<body>
+    <div id="engine-container">
+        <header id="topbar">🟣 Purple Engine - V1.0</header>
+        
+        <div id="main-workspace">
+            
+            <aside id="hierarchy">
+                <div class="panel-title">Hiyerarşi</div>
+                <ul id="scene-graph">
+                    <li class="active">P_Core_Neon</li>
+                    <li>Directional Light</li>
+                    <li>Grid_Ground</li>
+                </ul>
+            </aside>
+            
+            <main id="viewport-container">
+                </main>
+            
+            <aside id="inspector">
+                <div class="panel-title">Özellikler (P_Core)</div>
+                <div class="prop-group">
+                    <label>Transform</label>
+                    <div class="prop-row"><span>X:</span><input type="text" value="0"></div>
+                    <div class="prop-row"><span>Y:</span><input type="text" value="2"></div>
+                    <div class="prop-row"><span>Z:</span><input type="text" value="0"></div>
+                </div>
+                <div class="prop-group">
+                    <label>PBR Material</label>
+                    <div class="color-box"></div>
+                </div>
+            </aside>
+            
+        </div>
+        
+        <footer id="statusbar">Aga Sistem Devrede | Render: Yüksek Kalite PBR | Sakarya Lokasyonu Online</footer>
+    </div>
 
-    <script type="module" src="./main.js"></script>
-
+    <script type="module" src="main.js"></script>
 </body>
 </html>
