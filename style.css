@@ -1,0 +1,26 @@
+/* style.css */
+body {
+    margin: 0;
+    background-color: #050505;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #bc13fe;
+}
+
+#ui {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    pointer-events: none;
+    text-shadow: 0 0 10px #bc13fe;
+}
+
+h1 { margin: 0; font-size: 1.5rem; letter-spacing: 2px; }
+p { font-size: 0.8rem; opacity: 0.8; }
+
+canvas {
+    display: block;
+    outline: none;
+}
+
