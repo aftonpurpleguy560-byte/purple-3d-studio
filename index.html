@@ -32,22 +32,22 @@
                         <button id="add-btn" title="Obje Ekle">+</button>
                     </div>
                     <div id="add-menu" style="display: none; padding: 10px; background: #111; border-bottom: 1px solid #333;">
-                        <select id="obj-type">
+                        <select id="obj-type" style="width: 100%; margin-bottom: 5px; background: #000; color: #fff; border: 1px solid #bc13fe;">
                             <option value="box">Küp</option>
                             <option value="sphere">Küre</option>
                             <option value="torus">Halka</option>
                             <option value="sprite">Sprite (2D)</option>
                             <option value="neon">Neon Işık</option>
                         </select>
-                        <button id="confirm-add">Ekle</button>
+                        <button id="confirm-add" style="width: 100%; background: #bc13fe; color: #fff; border: none; padding: 5px; cursor: pointer;">Ekle</button>
                     </div>
                     <ul id="scene-graph"></ul>
                 </div>
 
                 <div id="project-content" style="display: none; padding: 15px;">
                     <div class="asset-grid">
-                        <div class="asset-item">📁 Models</div>
-                        <div class="asset-item">📁 Textures</div>
+                        <div class="asset-item" style="cursor: pointer; margin-bottom: 10px; padding: 5px; border: 1px solid #333;">📁 Models</div>
+                        <div class="asset-item" style="cursor: pointer; margin-bottom: 10px; padding: 5px; border: 1px solid #333;">📁 Textures</div>
                     </div>
                 </div>
             </aside>
@@ -71,6 +71,9 @@
                         <button class="tab-btn" id="tab-anim">Animation</button>
                     </div>
                     <div id="console-output" class="terminal-font"></div>
+                    <div id="anim-content" style="display: none; padding: 20px; color: #888; font-size: 12px; text-align: center;">
+                        🎞 Animasyon Zaman Çizelgesi (Yapım Aşamasında)
+                    </div>
                 </div>
             </section>
 
@@ -95,7 +98,7 @@
     <script type="module" src="main.js"></script>
 
     <script>
-        // Tab geçiş mantığı
+        // 1. SOL PANEL TAB SİSTEMİ (Explorer / Project)
         const tabHier = document.getElementById('tab-hierarchy');
         const tabProj = document.getElementById('tab-project');
         const contHier = document.getElementById('hierarchy-content');
@@ -114,6 +117,49 @@
             contProj.style.display = 'block';
             contHier.style.display = 'none';
         };
+
+        // 2. ALT PANEL TAB SİSTEMİ (Console / Animation)
+        const tabConsole = document.getElementById('tab-console');
+        const tabAnim = document.getElementById('tab-anim');
+        const contConsole = document.getElementById('console-output');
+        const contAnim = document.getElementById('anim-content');
+
+        tabConsole.onclick = () => {
+            tabConsole.classList.add('active');
+            tabAnim.classList.remove('active');
+            contConsole.style.display = 'block';
+            contAnim.style.display = 'none';
+        };
+
+        tabAnim.onclick = () => {
+            tabAnim.classList.add('active');
+            tabConsole.classList.remove('active');
+            contAnim.style.display = 'block';
+            contConsole.style.display = 'none';
+        };
+
+        // 3. HIYERARŞİ "+" MENÜSÜ AÇ/KAPAT
+        const addBtn = document.getElementById('add-btn');
+        const addMenu = document.getElementById('add-menu');
+
+        addBtn.onclick = (e) => {
+            e.stopPropagation(); // Diğer tıklamaları engelle
+            addMenu.style.display = (addMenu.style.display === 'none') ? 'block' : 'none';
+        };
+
+        // 4. PROJECT KLASÖRLERİNE TIKLAMA
+        document.querySelectorAll('.asset-item').forEach(item => {
+            item.onclick = () => {
+                alert(item.innerText + " klasörü henüz boş!");
+            };
+        });
+
+        // Sayfada herhangi bir yere basınca add-menu kapansın
+        document.addEventListener('click', (e) => {
+            if (!addMenu.contains(e.target) && e.target !== addBtn) {
+                addMenu.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
