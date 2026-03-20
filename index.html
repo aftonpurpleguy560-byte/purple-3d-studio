@@ -17,41 +17,38 @@
 </head>
 <body>
     <div id="engine-container">
-        <header id="topbar">🟣 Purple Engine - V1.0</header>
+        <header id="topbar" class="neon-glow">🟣 Purple Engine - V1.0</header>
         
+        <div id="tools-panel" class="floating-panel">
+            <button id="btn-select" class="tool-btn active">Seç 🖱️</button>
+            <button id="btn-translate" class="tool-btn">Sürükle ⬧</button>
+            <button id="btn-rotate" class="tool-btn">Döndür ↻</button>
+            <button id="btn-scale" class="tool-btn">Ölçek ⤡</button>
+        </div>
+
         <div id="main-workspace">
-            
-            <aside id="hierarchy">
+            <aside id="hierarchy" class="floating-panel">
                 <div class="panel-title">Hiyerarşi</div>
                 <ul id="scene-graph">
-                    <li class="active">P_Core_Neon</li>
-                    <li>Directional Light</li>
+                    <li id="list-core" class="active">P_Core_Neon</li>
                     <li>Grid_Ground</li>
                 </ul>
             </aside>
             
-            <main id="viewport-container">
-                </main>
+            <main id="viewport-container"></main>
             
-            <aside id="inspector">
-                <div class="panel-title">Özellikler (P_Core)</div>
+            <aside id="inspector" class="floating-panel">
+                <div class="panel-title" id="inspector-title">Özellikler (P_Core)</div>
                 <div class="prop-group">
-                    <label>Transform</label>
-                    <div class="prop-row"><span>X:</span><input type="text" value="0"></div>
-                    <div class="prop-row"><span>Y:</span><input type="text" value="2"></div>
-                    <div class="prop-row"><span>Z:</span><input type="text" value="0"></div>
-                </div>
-                <div class="prop-group">
-                    <label>PBR Material</label>
-                    <div class="color-box"></div>
+                    <label>Cyber Transform</label>
+                    <div class="prop-row"><span>X:</span><input type="text" id="pos-x" value="0" readonly></div>
+                    <div class="prop-row"><span>Y:</span><input type="text" id="pos-y" value="2" readonly></div>
+                    <div class="prop-row"><span>Z:</span><input type="text" id="pos-z" value="0" readonly></div>
                 </div>
             </aside>
-            
         </div>
-        
-        <footer id="statusbar">Aga Sistem Devrede | Render: Yüksek Kalite PBR | Sakarya Lokasyonu Online</footer>
+        <footer id="statusbar">Aga Sistem Devrede | Seçim Motoru Online</footer>
     </div>
-
     <script type="module" src="main.js"></script>
 </body>
 </html>
