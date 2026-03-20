@@ -1,28 +1,12 @@
-<!DOCTYPE html>
-<html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purple 3D Studio</title>
-    <style>
-        body { margin: 0; background: #000; overflow: hidden; font-family: sans-serif; }
-        canvas { display: block; }
-        #ui { position: absolute; top: 10px; left: 10px; color: #bc13fe; pointer-events: none; }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
-    <div id="ui">
-        <h1>Purple 3D Studio</h1>
-        <p>Aga ilk obje sahnede!</p>
-    </div>
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
-            }
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
         }
     </script>
     <script type="module" src="main.js"></script>
 </body>
-</html>
-
