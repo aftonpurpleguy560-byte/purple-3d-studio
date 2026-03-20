@@ -1,54 +1,42 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Purple Engine 2026</title>
-    <link rel="stylesheet" href="style.css">
+<div id="engine-container">
+    <header id="topbar" class="neon-glow">🟣 Purple Engine V1.5 | Project: Purple-3D-Studio</header>
     
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
-</head>
-<body>
-    <div id="engine-container">
-        <header id="topbar" class="neon-glow">🟣 Purple Engine - V1.0</header>
-        
-        <div id="tools-panel" class="floating-panel">
-            <button id="btn-select" class="tool-btn active">Seç 🖱️</button>
-            <button id="btn-translate" class="tool-btn">Sürükle ⬧</button>
-            <button id="btn-rotate" class="tool-btn">Döndür ↻</button>
-            <button id="btn-scale" class="tool-btn">Ölçek ⤡</button>
-        </div>
+    <div id="main-workspace">
+        <aside id="explorer" class="floating-panel">
+            <div class="panel-tabs">
+                <button class="tab-btn active" onclick="switchTab('hierarchy')">Explorer</button>
+                <button class="tab-btn" onclick="switchTab('project')">Project</button>
+            </div>
+            <div id="hierarchy-content">
+                <div class="panel-title">Hiyerarşi <button id="add-btn">+</button></div>
+                <ul id="scene-graph"></ul>
+            </div>
+        </aside>
 
-        <div id="main-workspace">
-            <aside id="hierarchy" class="floating-panel">
-                <div class="panel-title">Hiyerarşi</div>
-                <ul id="scene-graph">
-                    <li id="list-core" class="active">P_Core_Neon</li>
-                    <li>Grid_Ground</li>
-                </ul>
-            </aside>
+        <section id="center-viewport">
+            <div id="tools-panel">
+                <button id="btn-translate">Sürükle</button>
+                <button id="btn-rotate">Döndür</button>
+                <button id="btn-scale">Ölçek</button>
+                <button id="btn-delete" style="color: #ff4444;">Sil (Del)</button>
+            </div>
+            <div id="viewport-container"></div>
             
-            <main id="viewport-container"></main>
-            
-            <aside id="inspector" class="floating-panel">
-                <div class="panel-title" id="inspector-title">Özellikler (P_Core)</div>
-                <div class="prop-group">
-                    <label>Cyber Transform</label>
-                    <div class="prop-row"><span>X:</span><input type="text" id="pos-x" value="0" readonly></div>
-                    <div class="prop-row"><span>Y:</span><input type="text" id="pos-y" value="2" readonly></div>
-                    <div class="prop-row"><span>Z:</span><input type="text" id="pos-z" value="0" readonly></div>
+            <div id="bottom-panel" class="floating-panel">
+                <div class="panel-tabs">
+                    <button class="tab-btn active">Console</button>
+                    <button class="tab-btn">Animation Timeline</button>
                 </div>
-            </aside>
-        </div>
-        <footer id="statusbar">Aga Sistem Devrede | Seçim Motoru Online</footer>
+                <div id="console-output">> Purple Engine Initialized...</div>
+            </div>
+        </section>
+
+        <aside id="inspector" class="floating-panel">
+            <div class="panel-title">Inspector</div>
+            <div id="inspector-content">
+                <label>Transform</label>
+                <div class="prop-row">X: <input id="pos-x" type="number" step="0.1"></div>
+                </div>
+        </aside>
     </div>
-    <script type="module" src="main.js"></script>
-</body>
-</html>
+</div>
