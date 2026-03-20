@@ -17,6 +17,19 @@
     </script>
 </head>
 <body>
+    <div id="start-menu">
+        <div class="menu-content">
+            <h1 class="neon-glow">PURPLE 3D STUDIO</h1>
+            <p style="color: #888; margin-top: 10px;">Motorumuz henüz erken erişim / yapım aşamasındadır.</p>
+            <div class="info-box">
+                <p>⚠️ Hata (Bug) raporları için:</p>
+                <a href="mailto:aftonpurpleguy560@gmail.com">aftonpurpleguy560@gmail.com</a>
+            </div>
+            <button id="btn-start" class="tool-btn active" style="width: 100%; padding: 15px; font-size: 18px;">BAŞLA</button>
+            <p style="font-size: 10px; color: #444; margin-top: 20px;">Purpleguy © 2026 - tablet power</p>
+        </div>
+    </div>
+
     <div id="engine-container">
         <header id="topbar" class="neon-glow">🟣 Purple Engine - V1.5</header>
         
@@ -30,27 +43,25 @@
                 <div id="hierarchy-content">
                     <div class="panel-title">
                         <span id="label-hierarchy">Hiyerarşi</span>
-                        <button id="add-btn" title="Obje Ekle">+</button>
+                        <button id="add-btn">+</button>
                     </div>
-                    <div id="add-menu" style="display: none; padding: 10px; background: #111; border-bottom: 1px solid #333;">
-                        <select id="obj-type" style="width: 100%; margin-bottom: 5px; background: #000; color: #fff; border: 1px solid #bc13fe; padding: 4px;">
+                    <div id="add-menu" style="display: none; padding: 10px; background: #111;">
+                        <select id="obj-type" style="width: 100%; background: #000; color: #fff; border: 1px solid #bc13fe; padding: 5px; margin-bottom: 5px;">
                             <option value="box">Küp</option>
                             <option value="sphere">Küre</option>
                             <option value="torus">Halka</option>
                             <option value="sprite">Sprite (2D)</option>
                             <option value="neon">Neon Işık</option>
                         </select>
-                        <button id="confirm-add" style="width: 100%; background: #bc13fe; color: #fff; border: none; padding: 6px; cursor: pointer; font-weight: bold; border-radius: 3px;">Ekle</button>
+                        <button id="confirm-add" style="width: 100%; background: #bc13fe; border: none; color: white; padding: 5px;">Ekle</button>
                     </div>
                     <ul id="scene-graph"></ul>
                 </div>
 
                 <div id="project-content" style="display: none; padding: 15px;">
-                    <div class="asset-grid">
-                        <div class="asset-item" style="cursor: pointer; margin-bottom: 10px; padding: 8px; border: 1px solid #333; background: #111; border-radius: 4px;">📁 Models</div>
-                        <div class="asset-item" style="cursor: pointer; margin-bottom: 10px; padding: 8px; border: 1px solid #333; background: #111; border-radius: 4px;">📁 Textures</div>
-                        <div class="asset-item" style="cursor: pointer; margin-bottom: 10px; padding: 8px; border: 1px solid #333; background: #111; border-radius: 4px;">📁 Scripts</div>
-                    </div>
+                    <div class="asset-item">📁 Models</div>
+                    <div class="asset-item">📁 Textures</div>
+                    <div class="asset-item">📁 Scripts</div>
                 </div>
             </aside>
 
@@ -73,132 +84,78 @@
                         <button class="tab-btn active" id="tab-console">Console</button>
                         <button class="tab-btn" id="tab-anim">Animation</button>
                     </div>
-                    
                     <div id="console-output" class="terminal-font"></div>
-                    
                     <div id="anim-content" style="display: none; padding: 15px; background: #0a0a0a; height: 100%;">
-                        <div class="timeline-header" style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center;">
-                            <button id="anim-play" class="tool-btn" style="padding: 5px 15px; background: #222; border: 1px solid #bc13fe; color: #fff;">▶ Oynat</button>
-                            <button id="anim-record" class="tool-btn danger" style="padding: 5px 15px; border: 1px solid #ff4444;">● Kaydet</button>
+                        <div class="timeline-header" style="display: flex; gap: 10px; align-items: center;">
+                            <button id="anim-play" class="tool-btn">▶</button>
                             <input type="range" id="timeline-slider" min="0" max="100" value="0" style="flex: 1; accent-color: #bc13fe;">
                         </div>
-                        <div class="timeline-track" style="height: 50px; background: #111; border: 1px dashed #333; position: relative; overflow: hidden; border-radius: 4px;">
-                            <div id="timeline-cursor" style="position: absolute; width: 2px; height: 100%; background: #bc13fe; left: 0; box-shadow: 0 0 8px #bc13fe;"></div>
+                        <div class="timeline-track" style="height: 40px; background: #111; border: 1px dashed #333; margin-top: 10px; position: relative;">
+                            <div id="timeline-cursor" style="position: absolute; width: 2px; height: 100%; background: #bc13fe; left: 0;"></div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <aside id="inspector" class="floating-panel">
-                <div class="panel-title" id="label-inspector">Inspector</div>
+                <div class="panel-title">Inspector</div>
                 <div id="inspector-content">
-                    
                     <div class="prop-group">
                         <label>Transform</label>
-                        <div class="prop-row"><span>X:</span><input type="number" id="pos-x" step="0.1" value="0"></div>
-                        <div class="prop-row"><span>Y:</span><input type="number" id="pos-y" step="0.1" value="0"></div>
-                        <div class="prop-row"><span>Z:</span><input type="number" id="pos-z" step="0.1" value="0"></div>
+                        <div class="prop-row"><span>X:</span><input type="number" id="pos-x" step="0.1"></div>
+                        <div class="prop-row"><span>Y:</span><input type="number" id="pos-y" step="0.1"></div>
+                        <div class="prop-row"><span>Z:</span><input type="number" id="pos-z" step="0.1"></div>
                     </div>
-                    
                     <div class="prop-group" style="margin-top: 20px; border-top: 1px solid #222; padding-top: 15px;">
-                        <label>Material / Işık</label>
+                        <label>Material</label>
                         <div class="prop-row">
                             <span>Renk:</span>
-                            <input type="color" id="obj-color" value="#bc13fe" style="height: 30px; cursor: pointer; padding: 0; border: none; border-radius: 4px;">
+                            <input type="color" id="obj-color" value="#bc13fe" style="height: 30px; width: 100%;">
                         </div>
                         <div class="prop-row">
-                            <span>Parlama:</span>
-                            <input type="range" id="obj-emissive" min="0" max="3" step="0.1" value="0.6" style="width: 100%; accent-color: #bc13fe;">
+                            <span>Parlak:</span>
+                            <input type="range" id="obj-emissive" min="0" max="3" step="0.1" value="0.6" style="width: 100%;">
                         </div>
                     </div>
-                    
                 </div>
             </aside>
         </div>
-        
-        <footer id="statusbar">
-            🟢 Sistem Hazır | Sakarya Studio Online
-        </footer>
+        <footer id="statusbar">🟢 Sistem Hazır | Sakarya Studio</footer>
     </div>
 
     <script type="module" src="main.js"></script>
-
     <script>
-        // 1. SOL PANEL TAB SİSTEMİ (Explorer / Project)
-        const tabHier = document.getElementById('tab-hierarchy');
-        const tabProj = document.getElementById('tab-project');
-        const contHier = document.getElementById('hierarchy-content');
-        const contProj = document.getElementById('project-content');
-
-        tabHier.onclick = () => {
-            tabHier.classList.add('active');
-            tabProj.classList.remove('active');
-            contHier.style.display = 'block';
-            contProj.style.display = 'none';
+        // UI Sekme Geçişleri
+        document.getElementById('tab-hierarchy').onclick = () => {
+            document.getElementById('hierarchy-content').style.display = 'block';
+            document.getElementById('project-content').style.display = 'none';
+            document.getElementById('tab-hierarchy').classList.add('active');
+            document.getElementById('tab-project').classList.remove('active');
         };
-
-        tabProj.onclick = () => {
-            tabProj.classList.add('active');
-            tabHier.classList.remove('active');
-            contProj.style.display = 'block';
-            contHier.style.display = 'none';
+        document.getElementById('tab-project').onclick = () => {
+            document.getElementById('hierarchy-content').style.display = 'none';
+            document.getElementById('project-content').style.display = 'block';
+            document.getElementById('tab-project').classList.add('active');
+            document.getElementById('tab-hierarchy').classList.remove('active');
         };
-
-        // 2. ALT PANEL TAB SİSTEMİ (Console / Animation)
-        const tabConsole = document.getElementById('tab-console');
-        const tabAnim = document.getElementById('tab-anim');
-        const contConsole = document.getElementById('console-output');
-        const contAnim = document.getElementById('anim-content');
-
-        tabConsole.onclick = () => {
-            tabConsole.classList.add('active');
-            tabAnim.classList.remove('active');
-            contConsole.style.display = 'block';
-            contAnim.style.display = 'none';
-            // Konsol sekmesine geçince en alta kaydır
-            contConsole.scrollTop = contConsole.scrollHeight;
+        document.getElementById('tab-console').onclick = () => {
+            document.getElementById('console-output').style.display = 'block';
+            document.getElementById('anim-content').style.display = 'none';
+            document.getElementById('tab-console').classList.add('active');
+            document.getElementById('tab-anim').classList.remove('active');
         };
-
-        tabAnim.onclick = () => {
-            tabAnim.classList.add('active');
-            tabConsole.classList.remove('active');
-            contAnim.style.display = 'block';
-            contConsole.style.display = 'none';
+        document.getElementById('tab-anim').onclick = () => {
+            document.getElementById('console-output').style.display = 'none';
+            document.getElementById('anim-content').style.display = 'block';
+            document.getElementById('tab-anim').classList.add('active');
+            document.getElementById('tab-console').classList.remove('active');
         };
-
-        // 3. HIYERARŞİ "+" MENÜSÜ AÇ/KAPAT
-        const addBtn = document.getElementById('add-btn');
-        const addMenu = document.getElementById('add-menu');
-
-        addBtn.onclick = (e) => {
-            e.stopPropagation(); // Diğer tıklamaları engelle
-            addMenu.style.display = (addMenu.style.display === 'none') ? 'block' : 'none';
+        document.getElementById('add-btn').onclick = (e) => {
+            e.stopPropagation();
+            const menu = document.getElementById('add-menu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
         };
-
-        // Sayfada herhangi bir yere basınca add-menu kapansın
-        document.addEventListener('click', (e) => {
-            if (!addMenu.contains(e.target) && e.target !== addBtn) {
-                addMenu.style.display = 'none';
-            }
-        });
-
-        // 4. PROJECT KLASÖRLERİNE TIKLAMA (Alert kaldırıldı, sadece log atıyor)
-        document.querySelectorAll('.asset-item').forEach(item => {
-            item.onclick = () => {
-                console.log(item.innerText + " klasörüne tıklandı.");
-                // Eğer konsolda da görünmesini istersen main.js'deki logToConsole fonksiyonunu kullanacağız.
-            };
-        });
-        
-        // 5. ZAMAN ÇİZELGESİ (TIMELINE) UI HAREKETİ
-        const timelineSlider = document.getElementById('timeline-slider');
-        const timelineCursor = document.getElementById('timeline-cursor');
-        
-        if(timelineSlider && timelineCursor) {
-            timelineSlider.oninput = () => {
-                timelineCursor.style.left = timelineSlider.value + '%';
-            };
-        }
     </script>
 </body>
 </html>
+
