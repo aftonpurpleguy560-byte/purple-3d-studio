@@ -17,7 +17,7 @@
 </head>
 <body>
     <div id="engine-container">
-        <header id="topbar" class="neon-glow">🟣 Purple Engine - V1.5 | Studio Mode</header>
+        <header id="topbar" class="neon-glow">🟣 Purple Engine - V1.5</header>
         
         <div id="main-workspace">
             <aside id="explorer" class="floating-panel">
@@ -28,7 +28,7 @@
                 
                 <div id="hierarchy-content">
                     <div class="panel-title">
-                        Hiyerarşi 
+                        <span id="label-hierarchy">Hiyerarşi</span>
                         <button id="add-btn" title="Obje Ekle">+</button>
                     </div>
                     <div id="add-menu" style="display: none; padding: 10px; background: #111; border-bottom: 1px solid #333;">
@@ -39,52 +39,43 @@
                             <option value="sprite">Sprite (2D)</option>
                             <option value="neon">Neon Işık</option>
                         </select>
-                        <button id="confirm-add">Doğur</button>
+                        <button id="confirm-add">Ekle</button>
                     </div>
-                    <ul id="scene-graph">
-                        </ul>
+                    <ul id="scene-graph"></ul>
                 </div>
 
-                <div id="project-content" style="display: none;">
-                    <div class="panel-title">Assets / Dosyalar</div>
+                <div id="project-content" style="display: none; padding: 15px;">
                     <div class="asset-grid">
                         <div class="asset-item">📁 Models</div>
                         <div class="asset-item">📁 Textures</div>
-                        <div class="asset-item">📁 Scripts</div>
                     </div>
                 </div>
             </aside>
 
             <section id="center-viewport">
                 <div id="tools-panel">
+                    <button id="btn-save" class="tool-btn" style="border: 1px solid #00ff41; color: #00ff41;">KAYDET 💾</button>
+                    <div class="divider"></div>
                     <button id="btn-translate" class="tool-btn active">Sürükle</button>
                     <button id="btn-rotate" class="tool-btn">Döndür</button>
                     <button id="btn-scale" class="tool-btn">Ölçek</button>
                     <div class="divider"></div>
-                    <button id="btn-delete" class="tool-btn danger">Sil (Del)</button>
+                    <button id="btn-delete" class="tool-btn danger">Sil</button>
                 </div>
                 
-                <div id="viewport-container">
-                    </div>
+                <div id="viewport-container"></div>
                 
                 <div id="bottom-panel" class="floating-panel">
                     <div class="panel-tabs">
                         <button class="tab-btn active" id="tab-console">Console</button>
                         <button class="tab-btn" id="tab-anim">Animation</button>
                     </div>
-                    <div id="console-output" class="terminal-font">
-                        <div class="log-entry">> Purple Engine Başlatıldı...</div>
-                        <div class="log-entry">> Kayıtlı Kullanıcı: Purpleguy</div>
-                        <div class="log-entry">> Sistem Durumu: Stabil</div>
-                    </div>
-                    <div id="anim-timeline" style="display: none; padding: 20px; text-align: center; color: #555;">
-                        Animasyon Kayıt Sistemi Hazırlanıyor... [REC]
-                    </div>
+                    <div id="console-output" class="terminal-font"></div>
                 </div>
             </section>
 
             <aside id="inspector" class="floating-panel">
-                <div class="panel-title">Inspector / Özellikler</div>
+                <div class="panel-title" id="label-inspector">Inspector</div>
                 <div id="inspector-content">
                     <div class="prop-group">
                         <label>Transform</label>
@@ -92,47 +83,36 @@
                         <div class="prop-row"><span>Y:</span><input type="number" id="pos-y" step="0.1" value="0"></div>
                         <div class="prop-row"><span>Z:</span><input type="number" id="pos-z" step="0.1" value="0"></div>
                     </div>
-                    <div class="prop-group">
-                        <label>Material</label>
-                        <div class="color-preview" id="mat-color"></div>
-                        <input type="color" id="color-picker" style="width: 100%; border: none; height: 30px; cursor: pointer;">
-                    </div>
                 </div>
             </aside>
         </div>
         
         <footer id="statusbar">
-            <span id="obj-count">Objeler: 0</span> | 
-            <span id="fps-counter">Render: 60 FPS</span> | 
-            <span>Sakarya Studio Online</span>
+            🟢 Sistem Hazır | Sakarya Studio Online
         </footer>
     </div>
 
     <script type="module" src="main.js"></script>
 
     <script>
-        function switchTab(tab) {
-            const hierarchy = document.getElementById('hierarchy-content');
-            const project = document.getElementById('project-content');
-            if(tab === 'hierarchy') {
-                hierarchy.style.display = 'block';
-                project.style.display = 'none';
-            } else {
-                hierarchy.style.display = 'none';
-                project.style.display = 'block';
-            }
-        }
-        
-        // Tab butonlarına basınca renk değiştirme ve geçiş
-        document.getElementById('tab-hierarchy').onclick = () => {
-            switchTab('hierarchy');
-            document.getElementById('tab-hierarchy').classList.add('active');
-            document.getElementById('tab-project').classList.remove('active');
+        // Tab geçiş mantığı
+        const tabHier = document.getElementById('tab-hierarchy');
+        const tabProj = document.getElementById('tab-project');
+        const contHier = document.getElementById('hierarchy-content');
+        const contProj = document.getElementById('project-content');
+
+        tabHier.onclick = () => {
+            tabHier.classList.add('active');
+            tabProj.classList.remove('active');
+            contHier.style.display = 'block';
+            contProj.style.display = 'none';
         };
-        document.getElementById('tab-project').onclick = () => {
-            switchTab('project');
-            document.getElementById('tab-project').classList.add('active');
-            document.getElementById('tab-hierarchy').classList.remove('active');
+
+        tabProj.onclick = () => {
+            tabProj.classList.add('active');
+            tabHier.classList.remove('active');
+            contProj.style.display = 'block';
+            contHier.style.display = 'none';
         };
     </script>
 </body>
